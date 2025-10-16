@@ -1,0 +1,120 @@
+# SPMA ML Configuration File
+# All hyperparameters and settings are centralized here
+
+# TCN Model Configuration
+tcn:
+  window_size: 32          # Input sequence length for temporal modeling
+  input_dim: 14            # Number of COS (Channel Occupancy Status) features
+  channels: 16             # Base number of channels in TCN
+  levels: 3                # Number of TCN levels (dilation layers)
+  kernel_size: 3           # Convolution kernel size
+  n_prio: 2                # Number of priority features
+  dropout: 0.1             # Dropout rate for regularization
+  use_depthwise_separable: true  # Use depthwise separable convolutions for efficiency
+  
+# DQN Model Configuration  
+dqn:
+  state_dim: 10            # State vector dimension
+  action_dim: 5            # Number of discrete actions (backoff steps: -2,-1,0,+1,+2)
+  hidden_dims: [64, 32]    # Hidden layer dimensions
+  epsilon_start: 1.0       # Initial exploration rate
+  epsilon_end: 0.01        # Final exploration rate  
+  epsilon_decay: 0.995     # Exploration rate decay per episode
+  gamma: 0.99              # Discount factor for future rewards
+  tau: 0.005               # Soft update parameter for target network
+
+# Training Configuration
+training:
+  batch_size: 32           # Training batch size
+  learning_rate: 0.001     # Learning rate for Adam optimizer
+  weight_decay: 1e-5       # L2 regularization weight
+  num_epochs: 100          # Number of training epochs
+  patience: 10             # Early stopping patience
+  
+  # DQN specific
+  buffer_size: 10000       # Experience replay buffer size
+  target_update: 100       # Target network update frequency (steps)
+  min_buffer_size: 1000    # Minimum buffer size before training starts
+  
+  # Data loading
+  num_workers: 4           # Number of data loading workers
+  pin_memory: true         # Pin memory for faster GPU transfer
+
+# Data Configuration
+data:
+  train_split: 0.8         # Training data split ratio
+  val_split: 0.2           # Validation data split ratio
+  sequence_stride: 1       # Stride for sliding window sequences
+  
+  # Capacity constraints
+  max_capacity: 1.0        # Maximum total capacity (soft constraint)
+  capacity_penalty_weight: 10.0  # Weight for capacity constraint penalty
+  
+  # Normalization
+  normalize_inputs: true   # Whether to normalize input features
+  normalize_targets: false # Whether to normalize target values
+
+# Environment Configuration
+environment:
+  max_episode_steps: 1000  # Maximum steps per episode
+  reward_scale: 1.0        # Reward scaling factor
+  
+  # ns-3 bridge configuration (for future integration)
+  ns3_bridge:
+    enabled: false         # Whether to use ns-3 bridge instead of stub
+    host: "localhost"      # ns-3 simulator host
+    port: 8080             # ns-3 simulator port
+    timeout: 5.0           # Connection timeout in seconds
+
+# Export and Deployment Configuration
+export:
+  # INT8 quantization settings
+  int8:
+    enabled: true          # Enable INT8 quantization
+    calibration_steps: 100 # Number of calibration steps for quantization
+    
+  # Model optimization
+  optimization:
+    fuse_modules: true     # Fuse compatible modules for efficiency
+    remove_dropout: true   # Remove dropout layers for inference
+    optimize_for_mobile: true  # Optimize for mobile deployment
+    
+  # Output formats
+  formats:
+    torchscript: true      # Export as TorchScript
+    onnx: false           # Export as ONNX (optional)
+    executorch: false     # Export as ExecuTorch (future)
+
+# Logging and Monitoring
+logging:
+  level: "INFO"            # Logging level (DEBUG, INFO, WARNING, ERROR)
+  log_dir: "logs"          # Directory for log files
+  log_interval: 10         # Logging interval (steps)
+  save_checkpoints: true   # Whether to save model checkpoints
+  checkpoint_interval: 50  # Checkpoint saving interval (epochs)
+
+# Benchmarking Configuration
+benchmark:
+  # Inference benchmarking
+  inference:
+    warmup_runs: 10        # Number of warmup runs before timing
+    num_runs: 1000         # Number of runs for timing
+    device: "cpu"          # Device for benchmarking (cpu/cuda)
+    
+  # Performance targets (milliseconds)
+  targets:
+    tcn_inference: 1.0     # Target TCN inference time
+    dqn_inference: 0.5     # Target DQN inference time
+    total_latency: 1.5     # Target total system latency
+
+# Hardware Configuration
+hardware:
+  device: "auto"           # Device selection (auto/cpu/cuda)
+  mixed_precision: false   # Use mixed precision training
+  compile_model: true      # Use torch.compile for optimization (PyTorch 2.0+)
+
+# Random seeds for reproducibility
+seed:
+  random: 42               # Random seed
+  numpy: 42                # NumPy seed  
+  torch: 42                # PyTorch seed
