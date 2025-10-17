@@ -1,0 +1,54 @@
+# Python venv
+.venv/
+venv/
+ENV/
+env/
+
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Build / dist
+build/
+dist/
+*.egg-info/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Data & outputs (allow small docs)
+data/*
+!data/README.md
+!data/samples/**
+outputs/
+!outputs/README.md
+logs/
+*.log
+
+# Models / checkpoints / exports
+*.pt
+*.pth
+*.onnx
+*.torchscript.pt
+
+# Experiment tracking
+wandb/
+mlruns/
+
+# Coverage artifacts
+htmlcov/
+.coverage*
+coverage.xml
+
+# Misc
+.env
+
