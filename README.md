@@ -1,6 +1,6 @@
 # SPMA节点端机器学习项目
 
-一个生产就绪的SPMA（Self-Protecting Multi-Access）节点端机器学习系统，使用TCN预测非平稳COS（Channel Occupancy Status），DQN选择退避动作。
+一个生产就绪的SPMA节点端机器学习系统，使用TCN预测非平稳COS（Channel Occupancy Status），DQN选择退避动作。
 
 ## 快速开始（5个命令）
 
